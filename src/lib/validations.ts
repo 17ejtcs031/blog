@@ -8,7 +8,7 @@ export const loginSchema = z.object({
 export const registerSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
-  password: z.string().min(8).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, 'Password must contain uppercase, lowercase, number, and special character'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
   confirmPassword: z.string()
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords don't match",
@@ -47,14 +47,18 @@ export const ideaSchema = z.object({
 })
 
 export const profileSchema = z.object({
-  name: z.string().min(1),
-  username: z.string().optional(),
-  bio: z.string().max(500).optional(),
-  website: z.string().optional(),
-  location: z.string().optional(),
-  socialTwitter: z.string().optional(),
-  socialGithub: z.string().optional(),
-  socialLinkedin: z.string().optional()
+  name: z.string().min(1).optional(),
+  username: z.string().optional().nullable(),
+  bio: z.string().max(500).optional().nullable(),
+  website: z.string().optional().nullable(),
+  location: z.string().optional().nullable(),
+  avatar: z.string().optional().nullable(),
+  socialTwitter: z.string().optional().nullable(),
+  socialGithub: z.string().optional().nullable(),
+  socialLinkedin: z.string().optional().nullable(),
+  defaultCategory: z.string().optional().nullable(),
+  autoSaveInterval: z.number().int().min(5).max(300).optional(),
+  theme: z.enum(['light', 'dark', 'system']).optional()
 })
 
 export const changePasswordSchema = z.object({

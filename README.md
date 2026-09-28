@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WriteSpace Blog Platform
 
-## Getting Started
+WriteSpace is a full-stack blog platform built with Next.js, Prisma, and SQLite. It supports public browsing for readers and authenticated author workflows for creating and managing posts.
 
-First, run the development server:
+## Features
+
+- Public blog homepage with published posts
+- User authentication with login and registration
+- Protected dashboard for authors to create, draft, publish, archive, and delete posts
+- Post preview and editor experience
+- Like and comment support for logged-in readers
+- Prisma schema with users, categories, posts, tags, likes, and comments
+- Seeded demo data for local testing
+
+## Tech Stack
+
+- Next.js 16 App Router
+- React 19
+- Prisma ORM with SQLite
+- Tailwind CSS
+- JWT-based session cookies
+- shadcn-style UI components
+
+## Local Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create the environment file:
+
+```bash
+cp .env.example .env
+```
+
+3. Generate the database and seed demo data:
+
+```bash
+npx prisma db push
+npm run seed
+```
+
+4. Start the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Demo Credentials
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Email: demo@example.com
+- Password: Demo@123
 
-## Learn More
+## Product Screens
 
-To learn more about Next.js, take a look at the following resources:
+- Public homepage: http://localhost:3000/
+- Login: http://localhost:3000/login
+- Dashboard: http://localhost:3000/dashboard
+- Posts management: http://localhost:3000/posts
+- Editor: http://localhost:3000/editor
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+src/
+  app/
+    api/            # Authentication and blog APIs
+    (auth)/         # Login, register, forgot password screens
+    (dashboard)/   # Protected author dashboard pages
+  components/      # Reusable UI
+  lib/             # Auth, validations, utilities, Prisma config
+prisma/
+  schema.prisma     # Database model
+  seed.ts           # Demo content
+```
 
-## Deploy on Vercel
+## API Overview
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Public endpoints
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- GET /api/posts/public
+  - Returns published posts, optionally filtered by slug
+- GET /api/posts/[id]
+  - Returns a published post or an author-owned post for authenticated users
+
+### Authenticated endpoints
+
+- POST /api/auth/login
+- POST /api/auth/register
+- POST /api/auth/logout
+- GET /api/auth/session
+
+### Blog interaction endpoints
+
+- POST /api/posts/[id]/comments
+- GET /api/posts/[id]/comments
+- POST /api/posts/[id]/like
+
+## Demo Recording Guidance
+
+To create the 2-minute walkthrough, run the app locally and capture:
+
+1. Public homepage browsing
+2. Registration or login flow
+3. Writing a new draft post in the dashboard
+4. Publishing the post
+5. Opening the public blog post and adding a like/comment
+
+## Architecture Summary
+
+The project follows a standard Next.js App Router structure:
+
+- Public pages are accessible without authentication and display published content.
+- Protected dashboard routes enforce session validation via middleware and JWT cookies.
+- Prisma serves as the database layer for users, categories, posts, tags, likes, and comments.
+- Blog read/write actions are split between public browsing routes and protected author APIs.
+
+For the full technical design and API contracts, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
